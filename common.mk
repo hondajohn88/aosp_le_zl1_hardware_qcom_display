@@ -1,8 +1,8 @@
 #Common headers
-common_includes := $(call project-path-for,qcom-display)/libgralloc
-common_includes += $(call project-path-for,qcom-display)/libcopybit
-common_includes += $(call project-path-for,qcom-display)/libqdutils
-common_includes += $(call project-path-for,qcom-display)/libqservice
+common_includes := $(LOCAL_PATH)/../libgralloc
+common_includes += $(LOCAL_PATH)/../libcopybit
+common_includes += $(LOCAL_PATH)/../libqdutils
+common_includes += $(LOCAL_PATH)/../libqservice
 
 common_header_export_path := qcom/display
 
@@ -11,7 +11,7 @@ common_libs := liblog libutils libcutils libhardware
 
 #Common C flags
 common_flags := -DDEBUG_CALC_FPS -Wno-missing-field-initializers
-common_flags += -Wconversion -Wall
+common_flags += -Wconversion -Wall -Werror
 
 ifeq ($(TARGET_USES_POST_PROCESSING),true)
     common_flags     += -DUSES_POST_PROCESSING
@@ -22,8 +22,11 @@ ifeq ($(ARCH_ARM_HAVE_NEON),true)
     common_flags += -D__ARM_HAVE_NEON
 endif
 
-ifeq ($(call is-board-platform-in-list, msm8996), true)
+ifeq ($(call is-board-platform-in-list, $(MSM_VIDC_TARGET_LIST)), true)
     common_flags += -DVENUS_COLOR_FORMAT
+endif
+
+ifeq ($(call is-board-platform-in-list, $(MASTER_SIDE_CP_TARGET_LIST)), true)
     common_flags += -DMASTER_SIDE_CP
 endif
 
